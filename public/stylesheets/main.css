@@ -1,0 +1,81 @@
+*{
+    box-sizing: border-box;
+    /* border: 1px solid rgb(46, 46, 194); */
+}
+
+.container {
+    width: 100%
+}
+
+header {
+    display: flex;
+    justify-content: center;
+}
+
+.login {
+    position: absolute;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: center;
+}
+
+.navigation {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    text-align: center;
+    width: 40vw;
+    
+}
+
+.nav-names {
+    text-align: center;
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    border: 2px solid black;
+    font-weight:bold;
+    font-size: 2vh;
+    background-color: rgba(158, 54, 27, 0.377);
+}
+
+.title {
+    font-size: 7vh;
+}
+
+.dish-nutrients {
+
+}
+
+.box {
+    display: flex;
+    justify-content: center;
+}
+
+.list {
+    font-size: 20px;
+}
+
+.list-1 {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 5vh;
+}
+
+.list-1 img {
+    height: 20%;
+    width: 20%;
+}
+
+/* .wrap-list {
+    display: flex;
+    justify-content: center;
+} */
+
+/* .list-wrap {
+    display: flex;
+    flex-direction: column;
+} */

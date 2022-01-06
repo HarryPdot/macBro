@@ -1,1 +1,20 @@
-<h1>hello world</h1>
+
+<div>Search for the perfect meal: </div>
+
+<form action="/macbro" method="get" class="search-bar">
+<input type="text" placeholder="calorie" name="calorie">
+<input type="text" placeholder="protein" name="protein">
+<input type="text" placeholder="carbs" name="carbs">
+<input type="text" placeholder="fat" name="fat">
+<button>search</button>
+</form>
+
+<a href="">add your own meal plan</a>
+
+
+<div class="list-1">
+<%dishes.each do |dish|%>
+<p ><a class="list" href="/macbro/<%=dish['id']%>"><%=dish['name']%></a></p>
+<img src="https://baconmockup.com/640/360" alt="">
+<%end%>
+</div>
