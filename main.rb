@@ -80,8 +80,7 @@ get '/macbro/:name'do
       fat: result[0]["fat"],
       image_url: result[0]["dish_img"],
       recipe: result[0]["recipe"]
-    }
-  else
+    } else
     name_res = apiResult['results'][0]["title"]
     calories_res = apiResult["results"][0]["nutrition"]["nutrients"][0]['amount']
     fat_res = apiResult["results"][0]["nutrition"]["nutrients"][1]['amount']
