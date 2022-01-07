@@ -4,12 +4,12 @@ require 'bcrypt'
 puts "creating dummy user..."
 
 #hard code the email and password
-email = "test@ga.co"
-password = "test"
+email = "test2@ga.co"
+password = "test2"
 
 
 # connect to db
-conn = PG.connect(dbname: 'macBro')
+conn = PG.connect(dbname: 'macbro')
 
 #exec an insert statement to create a new user
 password_digest = BCrypt::Password.create(password)

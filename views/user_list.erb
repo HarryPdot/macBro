@@ -1,0 +1,18 @@
+<div class="wrap-list">
+<%result.each do |option|%>
+    <div class="list-wrap">
+        <p><a href="/macbro/<%=option["name"]%>"><%=option["name"]%></a>
+        <a href="/macbro/<%=option['id']%>/edit">update</a>
+
+        <form action="/macbro" method="post">
+        <input type="hidden" name="_method" value="delete">
+        <input type="hidden" name="recipe_id" value="<%=option['id']%>">
+        <button>delete</button>
+        </form>
+        </p>
+
+        <img src="<%=option["dish_img"]%>" alt="">
+    </div>
+<%end%>
+</div>
+

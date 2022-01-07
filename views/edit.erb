@@ -1,0 +1,28 @@
+<h1>update recipe</h1>
+
+<form action="/macbro/<%=id%>" method="post">
+    <input type="hidden" name="_method" value= "put">
+    <label for="">name</label>
+    <input type="text" name="name" value=<%=name%>>
+
+    <label for="">calories</label>
+    <input type="text" name="calorie" value=<%=calories%>>
+
+    <label for="">protein</label>
+    <input type="text" name="protein" value=<%=protein%>>
+    
+    <label for="">carbohydrates</label>
+    <input type="text" name="carbs" value=<%=carbs%>>
+
+    <label for="">fat</label>
+    <input type="text" name="fat" value=<%=fat%>>
+
+    <label for="">image_url</label>
+    <input type="text" name="dish_img" value=<%=dish_img%>>
+
+    <label for="">recipe url</label>
+    <input type="url" name="recipe" placeholder="http://..." value=<%=recipe%>>
+
+    <button>update</button>
+
+</form>

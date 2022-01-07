@@ -1,8 +1,8 @@
 <div class="wrap-list">
 <%result["results"].each do |option|%>
     <div class="list-wrap">
-        <p><a href=""><%=option["title"]%></a></p>
-        <img src="<%=option["image"]%>" alt="">
+        <p><a href="/macbro/<%=option["title"]%>"><%=option["title"]%></a></p>
+        <img src="<%=option["dish_img"]%>" alt="">
     </div>
 <%end%>
 </div>
