@@ -37,6 +37,18 @@ get '/' do
   }
 end
 
+get '/macbro/about' do
+  
+
+  erb :about
+end
+
+get '/macbro/contact' do
+  
+
+  erb :contact
+end
+
 get '/macbro/new' do
   redirect '/login' unless logged_in?
 

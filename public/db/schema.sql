@@ -9,7 +9,8 @@ create table macro (
     carbs integer,
     fat integer,
     dish_img text,
-    recipe text
+    recipe text,
+    user_id integer
 );
 
 insert into macro (name, calorie, protein, carbs, fat) values ('creamy tuna and pasta','228', '28', '23', '3');
