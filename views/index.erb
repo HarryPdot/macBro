@@ -20,8 +20,8 @@
             <% i = 0 %>
             <% while i < index.length%>
             <div>
-                <p ><a class="list" href="/macbro/<%=dishes[i]['id']%>"><%=dishes[i]['name']%></a></p>
-                <img src="<%=dishes[i]['dish_img']%>" alt="" class="index-images">
+                <p ><a class="list" href="/macbro/<%=dishes[index[i]]['id']%>"><%=dishes[index[i]]['name']%></a></p>
+                <img src="<%=dishes[index[i]]['dish_img']%>" alt="" class="index-images">
             </div>
             <% i += 1%>
             <%end%>

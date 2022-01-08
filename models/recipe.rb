@@ -1,6 +1,6 @@
 #crud method for recipes
 require 'pg'
-
+require 'bcrypt'
 def db_query(sql, params = [])
     conn = PG.connect(dbname: 'macbro')
   
@@ -42,4 +42,32 @@ end
 def select_recipe_id(id) 
   sql = "select * from macro where id= $1;"
   db_query(sql, id)
+end
+
+def signup(email, password)
+  conn = PG.connect(dbname: 'macbro')
+  password_digest = BCrypt::Password.create(password)
+  sql = "insert into users (email, password_digest) values ('#{email}','#{password_digest}');"
+  conn.exec(sql)
+  conn.close
+end
+
+def random_index() 
+  result = all_recipes()
+  random_index = []
+  result_length = result.count
+  j=0
+  if result_length > 5
+    while j < 6
+      random_index.push(rand(result.count))
+      j += 1
+    end
+    return random_index
+    else  
+      result_length.times do
+      random_index.push(rand(result.count))
+
+    end
+  return random_index
+  end
 end

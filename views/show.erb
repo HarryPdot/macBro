@@ -8,5 +8,31 @@
         <p>fat: <%=fat%>g</p>
         <p>recipe <a href="<%=recipe%>"><%=recipe%></a></p>
     </div>
+    <%if logged_in?%>
+        <form action="/macbro" method="post">
+        <label for=""></label>
+        <input type="hidden" name="name" value=<%=name%>>
+    
+        <label for=""></label>
+        <input type="hidden" name="calorie" value=<%=calorie%>>
+    
+        <label for=""></label>
+        <input type="hidden" name="protein" value=<%=protein%>>
+        
+        <label for=""></label>
+        <input type="hidden" name="carbs" value=<%=carbs%>>
+    
+        <label for=""></label>
+        <input type="hidden" name="fat" value=<%=fat%>>
+    
+        <label for=""></label>
+        <input type="hidden" name="dish_img" value=<%=image_url%>>
+    
+        <label for=""></label>
+        <input type="hidden" name="recipe" placeholder="http://..." value=<%=recipe%>>
+        
+        <button>Add</button>
+        </form>
+    <%end%>
 </div>
 

@@ -4,7 +4,7 @@ require 'pg'
 require 'bcrypt'
 require 'httparty'
 require_relative 'models/recipe.rb'
-
+require 'pry'
 
 enable :sessions
 
@@ -28,23 +28,10 @@ end
 
 get '/' do
   result = all_recipes()
-  random_index = []
-  result_length = result.count
-  j=0
-  if result_length > 5
-    while j < 6
-      random_index.push(rand(result.count)+1)
-      j += 1
-    end
-  else  
-    result_length.times do
-    random_index.push(rand(result.count)+1)
-    end
-  end
-
+  index_array = random_index()
   erb :index, locals: {
     dishes: result,
-    index: random_index
+    index: index_array
   }
 end
 
@@ -84,7 +71,7 @@ post '/macbro' do
 end
 
 get '/macbro/:id'do
-  apiResult = HTTParty.get("https://api.spoonacular.com/recipes/#{params["id"]}/information?includeNutrition=true&apiKey=5897cea122e748178c8ff383bb8fd236")
+  apiResult = HTTParty.get("https://api.spoonacular.com/recipes/#{params["id"]}/information?includeNutrition=true&apiKey=7a69bb3f6b9b4dbdaf1504243d943372")
   result = select_recipe_id([params['id']])
   if result.count > 0
     erb :show, locals: {
@@ -124,7 +111,7 @@ get '/macbro' do
   carbs = params["carbs"]
   fat = params["fat"]
   ingredients = params["ingredients"]
-  result = HTTParty.get("https://api.spoonacular.com/recipes/complexSearch?maxCalories=#{calorie}&maxProtein=#{protein}&maxCarbs=#{carbs}&maxFat=#{fat}&includeIngredients=#{ingredients}&number=10&apiKey=5897cea122e748178c8ff383bb8fd236")
+  result = HTTParty.get("https://api.spoonacular.com/recipes/complexSearch?maxCalories=#{calorie}&maxProtein=#{protein}&maxCarbs=#{carbs}&maxFat=#{fat}&includeIngredients=#{ingredients}&number=10&apiKey=7a69bb3f6b9b4dbdaf1504243d943372")
 
   erb :list, locals: {
     result: result,
@@ -143,6 +130,16 @@ end
 put '/macbro/:id' do
   update_recipe(params['name'], params['calorie'], params['protein'], params['carbs'], params['fat'], params['dish_img'], params['recipe'], params['id'])
   redirect '/macbro/list'
+end
+
+get '/signup' do
+
+  erb :signup
+end
+
+post '/signup' do
+  signup(params['email'], params['password'])
+  redirect '/login'
 end
 
 get '/login' do
@@ -186,6 +183,6 @@ end
 
 
 # https://api.spoonacular.com/recipes/complexSearch?titleMatch=pasta-with-tuna&addRecipeNutrition=true&apiKey=503ea3d989674393a4c80c01a257e8be
-# https://api.spoonacular.com/recipes/complexSearch?maxCalories=500&maxProtein=200&maxCarbs=300&maxFat=50&includeIngredients=chicken&number=10&apiKey=5897cea122e748178c8ff383bb8fd236
-# https://api.spoonacular.com/recipes/715415/information?includeNutrition=true&apiKey=5897cea122e748178c8ff383bb8fd236
-# https://api.spoonacular.com/recipes/complexSearch?maxCalories=#{calorie}&maxProtein=#{protein}&maxCarbs=#{carbs}&maxFat=#{fat}&includeIngredients=#{ingredients}&number=10&apiKey=5897cea122e748178c8ff383bb8fd236
+# https://api.spoonacular.com/recipes/complexSearch?maxCalories=500&maxProtein=200&maxCarbs=300&maxFat=50&includeIngredients=chicken&number=10&apiKey=7a69bb3f6b9b4dbdaf1504243d943372
+# https://api.spoonacular.com/recipes/715415/information?includeNutrition=true&apiKey=7a69bb3f6b9b4dbdaf1504243d943372
+# https://api.spoonacular.com/recipes/complexSearch?maxCalories=#{calorie}&maxProtein=#{protein}&maxCarbs=#{carbs}&maxFat=#{fat}&includeIngredients=#{ingredients}&number=10&apiKey=7a69bb3f6b9b4dbdaf1504243d943372
