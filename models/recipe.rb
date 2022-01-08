@@ -3,7 +3,6 @@ require 'pg'
 require 'bcrypt'
 def db_query(sql, params = [])
     conn = PG.connect(dbname: 'macbro')
-  
     result = conn.exec_params(sql, params)
     conn.close
     return result
