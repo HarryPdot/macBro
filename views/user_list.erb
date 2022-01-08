@@ -1,7 +1,7 @@
 <div class="wrap-list">
 <%result.each do |option|%>
     <div class="list-wrap">
-        <p><a href="/macbro/<%=option["name"]%>"><%=option["name"]%></a>
+        <p><a href="/macbro/<%=option["id"]%>"><%=option["name"]%></a>
         <a href="/macbro/<%=option['id']%>/edit">update</a>
 
         <form action="/macbro" method="post">

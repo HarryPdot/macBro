@@ -1,23 +1,30 @@
-
-
-<div class="search-bar">
-    <div>Search for the perfect meal: </div>
-    <form action="/macbro" method="get">
-        <input type="text" placeholder="calorie" name="calorie">
-        <input type="text" placeholder="protein" name="protein">
-        <input type="text" placeholder="carbs" name="carbs">
-        <input type="text" placeholder="fat" name="fat">
-        <input type="text" placeholder="ingredients" name="ingredients">
-    <button>search</button>
-    </form>
-</div>
-
-<a href="/macbro/new">add your own meal plan</a>
-
-
-<div class="list-1">
-<%dishes.each do |dish|%>
-<p ><a class="list" href="/macbro/<%=dish['name']%>"><%=dish['name']%></a></p>
-<img src="<%=dish['dish_img']%>" alt="">
-<%end%>
+<div class="within-container">
+    <div class="new-dish">
+        <a href="/macbro/new">add your own meal plan</a>
+    </div>
+    
+    <div class="search-bar">
+        <h3>Search for the perfect meal: </h3>
+        <form action="/macbro" method="get" class="search-inputs">
+            <input class="inputs" type="text" placeholder="calorie" name="calorie">
+            <input class="inputs" type="text" placeholder="protein" name="protein">
+            <input class="inputs" type="text" placeholder="carbs" name="carbs">
+            <input class="inputs" type="text" placeholder="fat" name="fat">
+            <input class="inputs" type="text" placeholder="ingredients" name="ingredients">
+            <button class="search-button">search</button>
+        </form>
+    </div>
+    
+    <div class="list-1">
+        
+            <% i = 0 %>
+            <% while i < index.length%>
+            <div>
+                <p ><a class="list" href="/macbro/<%=dishes[i]['id']%>"><%=dishes[i]['name']%></a></p>
+                <img src="<%=dishes[i]['dish_img']%>" alt="" class="index-images">
+            </div>
+            <% i += 1%>
+            <%end%>
+        
+    </div>
 </div>

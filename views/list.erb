@@ -1,7 +1,7 @@
 <div class="wrap-list">
 <%result["results"].each do |option|%>
     <div class="list-wrap">
-        <p><a href="/macbro/<%=option["title"]%>"><%=option["title"]%></a></p>
+        <p><a href="/macbro/<%=option["id"]%>"><%=option["title"]%></a></p>
         <img src="<%=option["dish_img"]%>" alt="">
     </div>
 <%end%>

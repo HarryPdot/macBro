@@ -3,6 +3,8 @@ require 'sinatra/reloader'
 require 'pg'
 require 'bcrypt'
 require 'httparty'
+require_relative 'models/recipe.rb'
+
 
 enable :sessions
 
@@ -24,16 +26,25 @@ def current_user()
   return OpenStruct.new(user)
 end
 
-
 get '/' do
-  conn = PG.connect(dbname: 'macbro')
-  sql = 'select * from macro'
-  result = conn.exec(sql)
-  conn.close
-
+  result = all_recipes()
+  random_index = []
+  result_length = result.count
+  j=0
+  if result_length > 5
+    while j < 6
+      random_index.push(rand(result.count)+1)
+      j += 1
+    end
+  else  
+    result_length.times do
+    random_index.push(rand(result.count)+1)
+    end
+  end
 
   erb :index, locals: {
-    dishes: result
+    dishes: result,
+    index: random_index
   }
 end
 
@@ -68,21 +79,13 @@ get '/macbro/list' do
 end
 
 post '/macbro' do
-  conn = PG.connect(dbname: 'macbro')
-  sql = "insert into macro (name, calorie, protein, carbs, fat, recipe, dish_img, user_id) values ('#{params['name']}', '#{params['calorie']}', '#{params['protein']}', '#{params['carbs']}', '#{params['fat']}', '#{params['dish_img']}', '#{params['recipe']}', '#{current_user().id}');"
-  conn.exec(sql)
-  conn.close
+  create_recipe(params['name'], params['calorie'], params['protein'], params['carbs'], params['fat'], params['dish_img'], params['recipe'], current_user().id)
   redirect '/'
 end
 
-get '/macbro/:name'do
-  name = params["name"]
-  apiResult = HTTParty.get("https://api.spoonacular.com/recipes/complexSearch?titleMatch=#{name}&addRecipeNutrition=true&apiKey=5897cea122e748178c8ff383bb8fd236")
-  conn = PG.connect(dbname: 'macbro')
-  sql = "select * from macro where name='#{name}'"
-  result = conn.exec(sql)
-  conn.close
-
+get '/macbro/:id'do
+  apiResult = HTTParty.get("https://api.spoonacular.com/recipes/#{params["id"]}/information?includeNutrition=true&apiKey=5897cea122e748178c8ff383bb8fd236")
+  result = select_recipe_id([params['id']])
   if result.count > 0
     erb :show, locals: {
       name: result[0]["name"],
@@ -93,20 +96,18 @@ get '/macbro/:name'do
       image_url: result[0]["dish_img"],
       recipe: result[0]["recipe"]
     } else
-    name_res = apiResult['results'][0]["title"]
-    calories_res = apiResult["results"][0]["nutrition"]["nutrients"][0]['amount']
-    fat_res = apiResult["results"][0]["nutrition"]["nutrients"][1]['amount']
-    carbs_res = apiResult["results"][0]["nutrition"]["nutrients"][3]['amount']
-    protein_res = apiResult["results"][0]["nutrition"]["nutrients"][8]['amount']
-    dish_img = apiResult['results'][0]['image']
-    recipe_res = apiResult['results'][0]['sourceUrl']
-    conn = PG.connect(dbname: 'macbro')
-    sql = "insert into macro (name, calorie, protein, carbs, fat, dish_img, recipe) values ('#{name}', '#{calories_res.to_i}', '#{protein_res.to_i}', '#{carbs_res.to_i}', '#{fat_res.to_i}','#{dish_img}', '#{recipe_res}');"
-    result = conn.exec(sql)
-    conn.close
+    name_res = apiResult["title"]
+    calories_res = apiResult["nutrition"]["nutrients"][0]['amount']
+    fat_res = apiResult["nutrition"]["nutrients"][1]['amount']
+    carbs_res = apiResult["nutrition"]["nutrients"][3]['amount']
+    protein_res = apiResult["nutrition"]["nutrients"][8]['amount']
+    dish_img = apiResult['image']
+    recipe_res = apiResult['sourceUrl']
 
-    erb :show_api, locals: {
-      name: name,
+    create_recipe_api(params['id'], name_res, calories_res.to_i, protein_res.to_i, carbs_res.to_i, fat_res.to_i, dish_img, recipe_res)
+
+    erb :show, locals: {
+      name: name_res,
       calorie: calories_res,
       protein: protein_res,
       carbs: carbs_res,
@@ -125,51 +126,24 @@ get '/macbro' do
   ingredients = params["ingredients"]
   result = HTTParty.get("https://api.spoonacular.com/recipes/complexSearch?maxCalories=#{calorie}&maxProtein=#{protein}&maxCarbs=#{carbs}&maxFat=#{fat}&includeIngredients=#{ingredients}&number=10&apiKey=5897cea122e748178c8ff383bb8fd236")
 
-
-
-
   erb :list, locals: {
     result: result,
   }
 end
 
 get '/macbro/:id/edit' do
-
-  conn= PG.connect(dbname: 'macbro')
-  sql = "select * from macro where id= #{params['id']}"
-  result = conn.exec(sql)[0]
+  sql = "select * from macro where id= $1"
+  result = db_query(sql, [params['id']])[0]
 
   erb :edit, locals: {
-    name: result['name'],
-    calories: result['calorie'],
-    protein: result['protein'],
-    carbs: result['carbs'],
-    fat: result['fat'],
-    dish_img: result['dish_img'],
-    recipe: result['recipe'],
-    id: result['id']
+    result: result
   }
 end
 
 put '/macbro/:id' do
-  name = params['name']
-  calories = params['calorie']
-  protein = params['protein']
-  carbs = params['carbs']
-  fat = params['fat']
-  dish_img = params['dish_img']
-  recipe = params['recipe']
-
-  conn = PG.connect(dbname: 'macbro')
-  sql = "update macro set name= '#{name}', calorie = '#{calories}', protein = '#{protein}', carbs = '#{carbs}', fat= '#{fat}', dish_img= '#{dish_img}', recipe= '#{recipe}' where id= #{params['id']};"
-
-  conn.exec(sql)
-  conn.close
-
+  update_recipe(params['name'], params['calorie'], params['protein'], params['carbs'], params['fat'], params['dish_img'], params['recipe'], params['id'])
   redirect '/macbro/list'
 end
-
-
 
 get '/login' do
   
@@ -185,14 +159,10 @@ post '/session' do
   sql = "select * from users where email = '#{email}';"
   result = conn.exec(sql)
   conn.close
-
-
   # if user exist in db
   if result.count > 0 && BCrypt::Password.new(result[0]['password_digest']).==(password)
     session[:user_id] = result[0]['id'] #its a hash / session for a single user
     redirect '/'
-
-
   else
    erb :login
   end
@@ -216,4 +186,6 @@ end
 
 
 # https://api.spoonacular.com/recipes/complexSearch?titleMatch=pasta-with-tuna&addRecipeNutrition=true&apiKey=503ea3d989674393a4c80c01a257e8be
-# https://api.spoonacular.com/recipes/complexSearch?maxCalories=500&maxProtein=200&maxCarbs=300&maxFat=50&includeIngredients=chicken&number=10&apiKey=503ea3d989674393a4c80c01a257e8be
+# https://api.spoonacular.com/recipes/complexSearch?maxCalories=500&maxProtein=200&maxCarbs=300&maxFat=50&includeIngredients=chicken&number=10&apiKey=5897cea122e748178c8ff383bb8fd236
+# https://api.spoonacular.com/recipes/715415/information?includeNutrition=true&apiKey=5897cea122e748178c8ff383bb8fd236
+# https://api.spoonacular.com/recipes/complexSearch?maxCalories=#{calorie}&maxProtein=#{protein}&maxCarbs=#{carbs}&maxFat=#{fat}&includeIngredients=#{ingredients}&number=10&apiKey=5897cea122e748178c8ff383bb8fd236

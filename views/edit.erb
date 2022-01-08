@@ -1,27 +1,27 @@
 <h1>update recipe</h1>
 
-<form action="/macbro/<%=id%>" method="post">
+<form action="/macbro/<%=result["id"]%>" method="post">
     <input type="hidden" name="_method" value= "put">
     <label for="">name</label>
-    <input type="text" name="name" value=<%=name%>>
+    <input type="text" name="name" value=<%=result['name']%>>
 
     <label for="">calories</label>
-    <input type="text" name="calorie" value=<%=calories%>>
+    <input type="text" name="calorie" value=<%=result['calorie']%>>
 
     <label for="">protein</label>
-    <input type="text" name="protein" value=<%=protein%>>
+    <input type="text" name="protein" value=<%=result['protein']%>>
     
     <label for="">carbohydrates</label>
-    <input type="text" name="carbs" value=<%=carbs%>>
+    <input type="text" name="carbs" value=<%=result['carbs']%>>
 
     <label for="">fat</label>
-    <input type="text" name="fat" value=<%=fat%>>
+    <input type="text" name="fat" value=<%=result['fat']%>>
 
     <label for="">image_url</label>
-    <input type="text" name="dish_img" value=<%=dish_img%>>
+    <input type="text" name="dish_img" value=<%=result['dish_img']%>>
 
     <label for="">recipe url</label>
-    <input type="url" name="recipe" placeholder="http://..." value=<%=recipe%>>
+    <input type="url" name="recipe" placeholder="http://..." value=<%=result['recipe']%>>
 
     <button>update</button>
 

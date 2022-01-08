@@ -9,16 +9,9 @@
 <body>
 
   <div class="container">
-  <% if logged_in? %>
-    logged in as <%= current_user.email %>
-    <form action="/session" method="post">
-      <input type="hidden" name="_method" value="delete">
-      <button>logout</button>
-    </form>
-
-  <% else %>
-    <a href="/login" class= "login">login</a>
-  <% end %>
+    <header>
+      <h1 class="title">macBro</h1>
+    </header>
     <div class="nav-container">
       <nav class="navigation">
         <a href="/" class="nav-home">Home</a>
@@ -27,17 +20,23 @@
         <a href="/macbro/contact" class="nav-contact">Contact Us</a>
       </nav>
     </div>
-    <header>
-      <h1 class="title">macBro</h1>
-    </header>
+    <% if logged_in? %>
+      logged in as <%= current_user.email %>
+      <form action="/session" method="post">
+        <input type="hidden" name="_method" value="delete">
+        <button>logout</button>
+      </form>
 
+    <% else %>
+      <div class= "login">
+        <a href="/login">login</a>
+      </div>
+    <% end %>
 
-
-
-
+   <%= yield %>
   </div>
   
-  <%= yield %>
+ 
 
 </body>
 </html>
