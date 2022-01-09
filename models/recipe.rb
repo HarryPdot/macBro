@@ -56,8 +56,8 @@ def random_index()
   random_index = []
   result_length = result.count
   j=0
-  if result_length > 5
-    while j < 6
+  if result_length > 9
+    while j < 9
       random_index.push(rand(result.count))
       j += 1
     end

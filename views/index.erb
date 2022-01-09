@@ -16,15 +16,18 @@
     </div>
     
     <div class="list-1">
-        
+        <div class="list-grid">
             <% i = 0 %>
             <% while i < index.length%>
-            <div>
-                <p ><a class="list" href="/macbro/<%=dishes[index[i]]['id']%>"><%=dishes[index[i]]['name']%></a></p>
-                <img src="<%=dishes[index[i]]['dish_img']%>" alt="" class="index-images">
+            <div> 
+                <div class="grid-list">
+                    <a class="list" href="/macbro/<%=dishes[index[i]]['id']%>"><%=dishes[index[i]]['name']%>
+                    <button><img src="<%=dishes[index[i]]['dish_img']%>" alt="" class="index-images"></button>
+                    </a>
+                </div>
             </div>
             <% i += 1%>
             <%end%>
-        
+        </div>
     </div>
 </div>
