@@ -220,9 +220,13 @@ header {
 }
 
 .box {
+    height: 100%;
+    width: 550px;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
+
 
 .list {
     font-size: 16px;
