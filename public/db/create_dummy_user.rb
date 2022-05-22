@@ -9,7 +9,7 @@ password = "test2"
 
 
 # connect to db
-conn = PG.connect(dbname: 'macbro')
+conn = PG.connect(ENV['DATABASE_URL'] || {dbname: 'macbro'})
 
 #exec an insert statement to create a new user
 password_digest = BCrypt::Password.create(password)

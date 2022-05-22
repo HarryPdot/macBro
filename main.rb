@@ -1,5 +1,4 @@
 require 'sinatra'
-require 'sinatra/reloader'
 require 'pg'
 require 'bcrypt'
 require 'httparty'
@@ -17,7 +16,7 @@ def logged_in?()
 
 def current_user()
 
-  conn = PG.connect(dbname: 'macbro')
+  conn = PG.connect(ENV['DATABASE_URL'] || {dbname: 'macbro'})
   sql = "select * from users where id = #{session[:user_id]};"
   result = conn.exec(sql)
   user = result[0]
@@ -54,7 +53,7 @@ end
 
 get '/macbro/list' do
   redirect '/login' unless logged_in?
-  conn = PG.connect(dbname: 'macbro')
+  conn = PG.connect(ENV['DATABASE_URL'] || {dbname: 'macbro'})
   sql = "select * from macro where user_id = #{current_user().id}"
   result = conn.exec(sql)
   conn.close
@@ -151,7 +150,7 @@ post '/session' do
 
   email = params["email"]
   password = params["password"]
-  conn = PG.connect(dbname: 'macbro')
+  conn = PG.connect(ENV['DATABASE_URL'] || {dbname: 'macbro'})
   sql = "select * from users where email = '#{email}';"
   result = conn.exec(sql)
   conn.close
@@ -165,7 +164,7 @@ post '/session' do
 end
 
 delete '/macbro' do
-  conn = PG.connect(dbname: 'macbro')
+  conn = PG.connect(ENV['DATABASE_URL'] || {dbname: 'macbro'})
   sql = "delete from macro where id=#{params['recipe_id']}"
   conn.exec(sql)
   conn.close

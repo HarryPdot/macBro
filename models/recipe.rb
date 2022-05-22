@@ -2,7 +2,7 @@
 require 'pg'
 require 'bcrypt'
 def db_query(sql, params = [])
-    conn = PG.connect(dbname: 'macbro')
+    conn = PG.connect(ENV['DATABASE_URL'] || {dbname: 'macbro'})
     result = conn.exec_params(sql, params)
     conn.close
     return result
@@ -44,7 +44,7 @@ def select_recipe_id(id)
 end
 
 def signup(email, password)
-  conn = PG.connect(dbname: 'macbro')
+  conn = PG.connect(ENV['DATABASE_URL'] || {dbname: 'macbro'})
   password_digest = BCrypt::Password.create(password)
   sql = "insert into users (email, password_digest) values ('#{email}','#{password_digest}');"
   conn.exec(sql)
