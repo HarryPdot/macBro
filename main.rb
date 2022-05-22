@@ -4,7 +4,6 @@ require 'pg'
 require 'bcrypt'
 require 'httparty'
 require_relative 'models/recipe.rb'
-require 'pry'
 
 enable :sessions
 
